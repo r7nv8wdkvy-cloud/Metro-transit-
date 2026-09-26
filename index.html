@@ -51,6 +51,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Ne
 .type{font-size:27px;line-height:1.15;margin-bottom:5px}.area{font-size:17px;color:#555;margin-bottom:43px}.expires{font-size:20px;font-weight:750}
 @media (max-height:700px){.content{padding-top:45px}.logo-wrap{margin-top:35px;margin-bottom:45px}}
 </style>
+<!-- BOTTOM LIVE DATE VERSION -->
 </head>
 <body>
 <div class="app">
@@ -67,22 +68,51 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Ne
     <section class="card">
       <div class="type">Adult Non-Rush Hour</div>
       <div class="area">Minneapolis/ St. Paul Metro Area</div>
-      <div class="expires">Expires <span id="liveDate">--</span> at 2:22 AM</div>
+      <div class="expires">Expires <span id="bottomDate">--</span> at <span id="bottomTime">--:-- --</span></div>
     </section>
   </main>
 </div>
 <script>
-const tz="America/Chicago";
-const dateFmt=new Intl.DateTimeFormat("en-US",{timeZone:tz,month:"short",day:"numeric",year:"numeric"});
-const full=new Intl.DateTimeFormat("en-US",{timeZone:tz,hour:"numeric",minute:"2-digit",second:"2-digit",hour12:true});
-const short=new Intl.DateTimeFormat("en-US",{timeZone:tz,hour:"numeric",minute:"2-digit",hour12:true});
-function tick(){
-  const n=new Date();
-  document.querySelector("#clock").textContent=full.format(n);
-  document.querySelector("#statusClock").textContent=short.format(n);
-  document.querySelector("#liveDate").textContent=dateFmt.format(n);
+const CENTRAL_TIME_ZONE = "America/Chicago";
+
+const clockFormatter = new Intl.DateTimeFormat("en-US", {
+  timeZone: CENTRAL_TIME_ZONE,
+  hour: "numeric",
+  minute: "2-digit",
+  second: "2-digit",
+  hour12: true
+});
+
+const shortFormatter = new Intl.DateTimeFormat("en-US", {
+  timeZone: CENTRAL_TIME_ZONE,
+  hour: "numeric",
+  minute: "2-digit",
+  hour12: true
+});
+
+const dateFormatter = new Intl.DateTimeFormat("en-US", {
+  timeZone: CENTRAL_TIME_ZONE,
+  month: "long",
+  day: "numeric",
+  year: "numeric"
+});
+
+function updateAllTimeFields() {
+  const now = new Date();
+
+  // Large clock
+  document.getElementById("clock").textContent = clockFormatter.format(now);
+
+  // iPhone-style top status clock
+  document.getElementById("statusClock").textContent = shortFormatter.format(now);
+
+  // BOTTOM expiration line — this is intentionally updated separately.
+  document.getElementById("bottomDate").textContent = dateFormatter.format(now);
+  document.getElementById("bottomTime").textContent = shortFormatter.format(now);
 }
-tick();setInterval(tick,250);
+
+updateAllTimeFields();
+setInterval(updateAllTimeFields, 1000);
 </script>
 </body>
 </html>
