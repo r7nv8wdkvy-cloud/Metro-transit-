@@ -68,7 +68,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Ne
     <section class="card">
       <div class="type">Adult Non-Rush Hour</div>
       <div class="area">Minneapolis/ St. Paul Metro Area</div>
-      <div class="expires">Expires <span id="bottomDate">--</span> at <span id="bottomTime">--:-- --</span></div>
+      <div class="expires">Expires <span id="bottomDate">--</span> at 2:22 AM</div>
     </section>
   </main>
 </div>
@@ -108,7 +108,6 @@ function updateAllTimeFields() {
 
   // BOTTOM expiration line — this is intentionally updated separately.
   document.getElementById("bottomDate").textContent = dateFormatter.format(now);
-  document.getElementById("bottomTime").textContent = shortFormatter.format(now);
 }
 
 updateAllTimeFields();
