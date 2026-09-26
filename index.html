@@ -67,15 +67,21 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Ne
     <section class="card">
       <div class="type">Adult Non-Rush Hour</div>
       <div class="area">Minneapolis/ St. Paul Metro Area</div>
-      <div class="expires">Expires Sep 19, 2026 at 2:22 AM</div>
+      <div class="expires">Expires <span id="liveDate">--</span> at 2:22 AM</div>
     </section>
   </main>
 </div>
 <script>
 const tz="America/Chicago";
+const dateFmt=new Intl.DateTimeFormat("en-US",{timeZone:tz,month:"short",day:"numeric",year:"numeric"});
 const full=new Intl.DateTimeFormat("en-US",{timeZone:tz,hour:"numeric",minute:"2-digit",second:"2-digit",hour12:true});
 const short=new Intl.DateTimeFormat("en-US",{timeZone:tz,hour:"numeric",minute:"2-digit",hour12:true});
-function tick(){const n=new Date();document.querySelector("#clock").textContent=full.format(n);document.querySelector("#statusClock").textContent=short.format(n)}
+function tick(){
+  const n=new Date();
+  document.querySelector("#clock").textContent=full.format(n);
+  document.querySelector("#statusClock").textContent=short.format(n);
+  document.querySelector("#liveDate").textContent=dateFmt.format(n);
+}
 tick();setInterval(tick,250);
 </script>
 </body>
