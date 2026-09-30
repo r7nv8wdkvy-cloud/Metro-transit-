@@ -4,20 +4,17 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Metro Transit">
-<meta name="theme-color" content="#101010">
+<meta name="theme-color" content="#fafafa">
 <title>Metro Transit</title>
 <style>
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;padding:0;width:100%;height:100%;background:#101010;overflow:hidden}
 body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",Arial,sans-serif}
-.app{width:100%;height:100%;min-height:100svh;background:#fafafa;color:#303236;overflow:auto}
-.status{height:clamp(100px,14.8vh,135px);padding:calc(env(safe-area-inset-top) + 9px) 39px 0;background:#101010;color:#fff;display:flex;justify-content:space-between;position:relative;font-weight:600;font-size:21px}
-.status-left{display:flex;gap:7px;align-items:center}.status-right{display:flex;gap:8px;align-items:center;font-size:17px}
-.island{position:absolute;left:50%;top:calc(env(safe-area-inset-top) + 4px);transform:translateX(-50%);width:220px;height:47px;border:2px solid #40151d;border-radius:28px;background:#000}
-.dot{position:absolute;left:14px;top:14px;width:16px;height:16px;border-radius:50%;background:#ef3b36}
-.content{padding:clamp(55px,10vh,98px) 30px 40px}
+.app{width:100%;height:100%;min-height:100svh;background:#fafafa;color:#303236;overflow:auto;position:relative}
+.close-btn{position:absolute;top:calc(env(safe-area-inset-top) + 16px);right:28px;width:38px;height:38px;border:0;background:transparent;color:#1596df;font-size:44px;line-height:34px;font-weight:300;padding:0;z-index:10}
+.content{padding:clamp(78px,11vh,112px) 30px 40px}
 .title{font-size:29px;line-height:1.05;font-weight:750;margin:0}
 .subtitle{font-size:21px;margin-top:2px}
 
@@ -55,11 +52,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Ne
 </head>
 <body>
 <div class="app">
-  <div class="status">
-    <div class="status-left"><span id="statusClock">--:--</span><span>☾</span></div>
-    <div class="island"><div class="dot"></div></div>
-    <div class="status-right">▮▮▮ ◔ 55</div>
-  </div>
+  <button class="close-btn" aria-label="Close">×</button>
   <main class="content">
     <h1 class="title">Metro Transit</h1>
     <div class="subtitle">Show operator your ticket</div>
@@ -102,9 +95,6 @@ function updateAllTimeFields() {
 
   // Large clock
   document.getElementById("clock").textContent = clockFormatter.format(now);
-
-  // iPhone-style top status clock
-  document.getElementById("statusClock").textContent = shortFormatter.format(now);
 
   // BOTTOM expiration line — this is intentionally updated separately.
   document.getElementById("bottomDate").textContent = dateFormatter.format(now);
