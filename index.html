@@ -49,10 +49,43 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Ne
 @media (max-height:700px){.content{padding-top:45px}.logo-wrap{margin-top:35px;margin-bottom:45px}}
 </style>
 <!-- BOTTOM LIVE DATE VERSION -->
+
+<style id="ticket-nav-styles">
+#ticketsPage{display:none;min-height:100vh;background:#000;color:#fff;font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif}
+#ticketsPage .tickets-header{height:86px;border-bottom:1px solid #242424;display:flex;align-items:center;justify-content:space-between;padding:0 28px;box-sizing:border-box}
+#ticketsPage .menu-icon,#ticketsPage .refresh-icon{color:#129bd1;font-size:42px;line-height:1;width:52px;text-align:center}
+#ticketsPage .tickets-title{font-size:36px;font-weight:600}
+#ticketsPage .activated{color:#129bd1;font-size:40px;font-weight:700;margin:66px 44px 70px}
+#ticketsPage .ticket-list-card{margin:0 34px;border-radius:17px;background:#050505;box-shadow:0 0 35px rgba(255,255,255,.08);padding:22px 20px;display:flex;align-items:stretch;min-height:330px;box-sizing:border-box}
+#ticketsPage .mini-logo-wrap{width:125px;display:flex;align-items:flex-start;justify-content:center;padding-top:10px;box-sizing:border-box}
+#ticketsPage .mini-logo{width:105px;height:105px;object-fit:contain}
+#ticketsPage .ticket-panel{background:#373737;flex:1;padding:36px 36px 30px;box-sizing:border-box}
+#ticketsPage .ticket-type{font-size:35px;font-weight:700;margin-bottom:76px}
+#ticketsPage .view-ticket{width:100%;height:142px;border:3px solid #129bd1;border-radius:22px;overflow:hidden;display:flex;background:#000;color:#fff;cursor:pointer;padding:0}
+#ticketsPage .view-ticket-main{flex:1;display:flex;align-items:center;justify-content:center;gap:24px;font-size:31px;line-height:1.05}
+#ticketsPage .ticket-symbol{font-size:42px}
+#ticketsPage .time-left{width:188px;background:#129bd1;color:#000;display:flex;align-items:center;justify-content:center;text-align:center;font-size:27px;line-height:1.25}
+#ticketsPage .buy-tickets{position:fixed;left:43px;right:43px;bottom:88px;height:96px;border:0;border-radius:22px;background:#129bd1;color:#000;font-size:31px;cursor:pointer}
+#ticketsPage button{font-family:inherit}
+@media(max-width:600px){
+#ticketsPage .tickets-header{height:76px;padding:0 20px}
+#ticketsPage .tickets-title{font-size:30px}
+#ticketsPage .activated{font-size:34px;margin:55px 32px 58px}
+#ticketsPage .ticket-list-card{margin:0 26px;min-height:290px;padding:18px 12px}
+#ticketsPage .mini-logo-wrap{width:90px}
+#ticketsPage .mini-logo{width:76px;height:76px}
+#ticketsPage .ticket-panel{padding:28px 20px 22px}
+#ticketsPage .ticket-type{font-size:27px;margin-bottom:54px}
+#ticketsPage .view-ticket{height:110px}
+#ticketsPage .view-ticket-main{font-size:24px;gap:14px}
+#ticketsPage .time-left{width:125px;font-size:21px}
+#ticketsPage .buy-tickets{left:26px;right:26px;bottom:34px;height:76px;font-size:25px}
+}
+
 </head>
 <body>
 <div class="app">
-  <button class="close-btn" aria-label="Close">×</button>
+  <button class="close-btn" aria-label="Close" id="closeBtn">×</button>
   <main class="content">
     <h1 class="title">Metro Transit</h1>
     <div class="subtitle">Show operator your ticket</div>
@@ -103,5 +136,60 @@ function updateAllTimeFields() {
 updateAllTimeFields();
 setInterval(updateAllTimeFields, 1000);
 </script>
+
+<div id="ticketsPage" aria-hidden="true">
+  <div class="tickets-header">
+    <div class="menu-icon">☰</div>
+    <div class="tickets-title">My Tickets</div>
+    <div class="refresh-icon">↻</div>
+  </div>
+  <div class="activated">Activated Tickets</div>
+  <div class="ticket-list-card">
+    <div class="mini-logo-wrap"><img class="mini-logo" src="logo.png" alt="Go-To"></div>
+    <div class="ticket-panel">
+      <div class="ticket-type">Adult Non-Rush Hour</div>
+      <button class="view-ticket" id="viewTicketBtn" type="button">
+        <span class="view-ticket-main"><span>View This<br>Ticket</span><span class="ticket-symbol">🎟</span></span>
+        <span class="time-left">TIME<br>LEFT<br>2 hours</span>
+      </button>
+    </div>
+  </div>
+  <button class="buy-tickets" type="button">Buy Tickets</button>
+</div>
+
+
+<script id="ticket-nav-script">
+(function(){
+  const ticketsPage=document.getElementById("ticketsPage");
+  function getClose(){
+    return document.getElementById("closeBtn") ||
+      document.querySelector(".close,.close-btn,.x-button,[aria-label='Close'],button[aria-label='close']");
+  }
+  function showTickets(){
+    Array.from(document.body.children).forEach(el=>{
+      if(el!==ticketsPage && el.tagName!=="SCRIPT" && !el.matches("#ticket-nav-script")){
+        el.dataset.ticketMain="1"; el.style.display="none";
+      }
+    });
+    ticketsPage.style.display="block";
+    ticketsPage.setAttribute("aria-hidden","false");
+  }
+  function showMain(){
+    ticketsPage.style.display="none";
+    ticketsPage.setAttribute("aria-hidden","true");
+    Array.from(document.body.children).forEach(el=>{
+      if(el.dataset && el.dataset.ticketMain==="1"){
+        el.style.display=""; delete el.dataset.ticketMain;
+      }
+    });
+  }
+  document.addEventListener("click",function(e){
+    const close=getClose();
+    if(close && (e.target===close || close.contains(e.target))){showTickets();return;}
+    if(e.target.closest && e.target.closest("#viewTicketBtn")){showMain();}
+  });
+})();
+</script>
+
 </body>
 </html>
