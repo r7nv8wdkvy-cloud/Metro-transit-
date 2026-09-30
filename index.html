@@ -81,7 +81,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Ne
 #ticketsPage .time-left{width:125px;font-size:21px}
 #ticketsPage .buy-tickets{left:26px;right:26px;bottom:34px;height:76px;font-size:25px}
 }
-
+</style>
 </head>
 <body>
 <div class="app">
@@ -159,35 +159,28 @@ setInterval(updateAllTimeFields, 1000);
 
 
 <script id="ticket-nav-script">
-(function(){
-  const ticketsPage=document.getElementById("ticketsPage");
-  function getClose(){
-    return document.getElementById("closeBtn") ||
-      document.querySelector(".close,.close-btn,.x-button,[aria-label='Close'],button[aria-label='close']");
+(function () {
+  const mainScreen = document.querySelector(".app");
+  const ticketsPage = document.getElementById("ticketsPage");
+  const closeBtn = document.getElementById("closeBtn");
+  const viewBtn = document.getElementById("viewTicketBtn");
+
+  function showTickets() {
+    mainScreen.style.display = "none";
+    ticketsPage.style.display = "block";
+    ticketsPage.setAttribute("aria-hidden", "false");
+    window.scrollTo(0, 0);
   }
-  function showTickets(){
-    Array.from(document.body.children).forEach(el=>{
-      if(el!==ticketsPage && el.tagName!=="SCRIPT" && !el.matches("#ticket-nav-script")){
-        el.dataset.ticketMain="1"; el.style.display="none";
-      }
-    });
-    ticketsPage.style.display="block";
-    ticketsPage.setAttribute("aria-hidden","false");
+
+  function showMain() {
+    ticketsPage.style.display = "none";
+    ticketsPage.setAttribute("aria-hidden", "true");
+    mainScreen.style.display = "block";
+    window.scrollTo(0, 0);
   }
-  function showMain(){
-    ticketsPage.style.display="none";
-    ticketsPage.setAttribute("aria-hidden","true");
-    Array.from(document.body.children).forEach(el=>{
-      if(el.dataset && el.dataset.ticketMain==="1"){
-        el.style.display=""; delete el.dataset.ticketMain;
-      }
-    });
-  }
-  document.addEventListener("click",function(e){
-    const close=getClose();
-    if(close && (e.target===close || close.contains(e.target))){showTickets();return;}
-    if(e.target.closest && e.target.closest("#viewTicketBtn")){showMain();}
-  });
+
+  closeBtn.addEventListener("click", showTickets);
+  viewBtn.addEventListener("click", showMain);
 })();
 </script>
 
